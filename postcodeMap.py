@@ -55,34 +55,39 @@ def processSmallCellInfo():
         sc_info = [x for x in smallcell_reader ]
         del sc_info[0]
     # get min and max values for APs and Customers
-    min_cust = min( sc_info, key=lambda x: (int(x[1])))
-    max_cust = max( sc_info, key=lambda x: (int(x[1])))
-    min_AP = min( sc_info, key=lambda x: (int(x[2])))
-    max_AP = max( sc_info, key=lambda x: (int(x[2])))
-
-    print "min-cust %d max_cust %d min_AP %d max_AP %d" % (int(min_cust[1]), int(max_cust[1]), int(min_AP[2]), int(max_AP[2]))
+    min_AP = min( sc_info, key=lambda x: (int(x[1])))
+    max_AP = max( sc_info, key=lambda x: (int(x[1])))
+    min_cust = min( sc_info, key=lambda x: (int(x[2])))
+    max_cust = max( sc_info, key=lambda x: (int(x[2])))
+	
+    print "min_cust %d max_cust %d min_AP %d max_AP %d" % (int(min_cust[2]), int(max_cust[2]), int(min_AP[1]), int(max_AP[1]))
         
     # for each postcode region, create a style for that postcode with a style colour
     # based on the number of cells or customers as a proportion of the maximum
     # use number of APs for now
 
+    # cap to remove max peak
+    max_cust_cap = (int(max_cust[2]) * 7) / 10
+    max_AP_cap = (int(max_AP[1]) * 5) / 10
+
     # scale the colour from white to solid red to create a red-scale map ranging from ffffff to ff0000
     # red always remains at maximum hue
     # green and blue move together 
     red = 0xff
-    cust_range = int(max_cust[1]) - int(min_cust[1])
+    cust_range = int(max_cust_cap) - int(min_cust[2])
+    ap_range = int(max_AP_cap) - int(min_AP[1])
 
     for row in sc_info:
         rowcount+=1
-        # ignore the title row
-        if rowcount == 1:
-            continue
 
         #print 'Writing style for %s' % row[0]
         #want the intensity of red to increase with increased cell/customer count
-        #if the greed/blue are both 0xff then the colour is white (RGB all at max)
+        #if the green/blue are both 0xff then the colour is white (RGB all at max)
         #with green/blue set to 0x0 then it is full red
-        green_and_blue = 255 - (255 * (int(row[1]) - int(min_cust[1])) / cust_range)
+        green_and_blue = 255 - (255 * (int(row[2]) - int(min_cust[2])) / cust_range)
+        #green_and_blue = 255 - (255 * (int(row[1]) - int(min_AP[1])) / ap_range)
+        if green_and_blue < 0:
+           green_and_blue = 0
 
         #color comprises transparency:green:blue:red
         #fix the transparency at halfway, 0x80
@@ -91,12 +96,12 @@ def processSmallCellInfo():
 
         kml_file.write("""
         <LineStyle>
-            <color>80%02x%02x%02x</color>
+            <color>E0%02x%02x%02x</color>
             <width>1</width>
             <fill>1</fill>
         </LineStyle>
         <PolyStyle>
-            <color>80%02x%02x%02x</color>
+            <color>E0%02x%02x%02x</color>
             <fill>1</fill>
             <outline>1</outline>
         </PolyStyle>
