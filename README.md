@@ -9,6 +9,8 @@ $ python postcodeMap.py <small cell config.csv> < UK postcodes.csv> < output.kml
 (c)  Go to https://www.google.com/maps and select MyMaps from the options button top left.  You need to be signed in with your Google account for this
  
 (d) Select 'Add Layer' and choose the import option to specify the generated .kml file
+
+(note, the UK Postcode .csv file can be obtained from https://www.google.com/fusiontables/data?docid=1jgWYtlqGSPzlIa-is8wl1cZkVIWEm_89rWUwqFU#card:id=2.  Click on File / Download from the menu bar)
  
 Hopefully you will see a map something like below
  
