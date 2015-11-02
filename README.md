@@ -2,6 +2,7 @@
 postcodeMap.py generates a Google map .kml file which can be imported into Google MyMaps.  Here's a summary of the usage:-
  
 (a) Create a customer / small cell usage spreadsheet mapping the usage to postcode region, as per smallcelldata.csv
+
 (b) Run the python with three commands to specify the usage spreadsheet, the UK postcode boundary data .csv and the required output filename
  
 $ python postcodeMap.py <small cell config.csv> < UK postcodes.csv> < output.kml>
